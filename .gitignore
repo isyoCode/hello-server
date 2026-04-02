@@ -1,0 +1,84 @@
+# Build artifacts
+build/
+dist/
+*.o
+*.a
+*.exe
+*.dll
+
+# Shared libraries - but NOT vendor libraries
+*.so
+!lib/vendor/**/*.so
+
+# Compiled binaries
+hello-git-server
+yoyo-server
+*.out
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# CMake build files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Temporary files
+*.tmp
+*.log
+*.swp
+*.bak
+*.backup
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Configuration files (keep examples)
+config/*.conf
+!config/*.example
+mysql.init.local
+
+# Runtime logs
+server_logs/
+logs/
+
+# Dependencies - exclude but allow vendor libraries
+lib/
+!lib/vendor/
+!lib/vendor/**/*.so
+!lib/README.md
+!lib/VENDOR_VERSIONS.md
+
+# Node modules (if any frontend)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Test artifacts
+test_results/
+*.gcov
+*.gcda
+*.gcno
+
+# Coverage reports
+coverage/
+*.lcov

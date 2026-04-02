@@ -1,0 +1,19 @@
+# MySQL 连接池配置文件
+# 该文件被 SqlPool 的 ConnectionPool 读取
+
+# 数据库连接信息
+ip=127.0.0.1
+port=3306
+
+# 认证信息
+username=root
+passwd=123456
+
+# 数据库名
+dbname=hello_app
+
+# 连接池配置
+initSize=5
+MaxSize=10
+maxIdleTime=300
+maxConnectionTimeOut=3000

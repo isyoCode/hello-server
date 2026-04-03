@@ -34,7 +34,10 @@ if [ ! -f "$SQLPOOL_LIB" ]; then
     exit 1
 fi
 
-LIB_FLAGS="-L$SQLPOOL_LIB_PATH -lmysqlpool -lmysqlclient -lssl -lcrypto"
+# Add rpath using $ORIGIN for portability - library path will be relative to executable
+# Executable is in build/, library is in lib/vendor/sqlpool/v1.0/
+# So from build/ we need to go ../lib/vendor/sqlpool/v1.0
+LIB_FLAGS="-L$SQLPOOL_LIB_PATH -Wl,-rpath,\$ORIGIN/../lib/vendor/sqlpool/v1.0 -lmysqlpool -lmysqlclient -lssl -lcrypto"
 
 # Source files
 CORE_SOURCES="$PROJECT_ROOT/src/core/Epoll.cc \
@@ -83,8 +86,15 @@ echo "================================"
 echo ""
 echo "Executable: $BUILD_DIR/yoyo-server"
 echo ""
+echo "✅ Portable configuration enabled:"
+echo "   - Library path uses \$ORIGIN (relative to executable)"
+echo "   - Resource path computed at runtime (relative to executable)"
+echo "   - Project can be moved to any directory"
+echo ""
 echo "To run the server:"
 echo "  cd $PROJECT_ROOT"
-echo "  export LD_LIBRARY_PATH=$PROJECT_ROOT/lib/vendor/sqlpool/v1.0:\$LD_LIBRARY_PATH"
+echo "  ./build/yoyo-server"
+echo ""
+echo "Or from any location:"
 echo "  $BUILD_DIR/yoyo-server"
 echo ""

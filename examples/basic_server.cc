@@ -8,6 +8,33 @@
 
 #include "../src/utils/logger.hpp"
 
+#include <unistd.h>
+#include <limits.h>
+#include <libgen.h>
+#include <iostream>
+
+// 获取可执行文件所在目录的绝对路径
+std::string getExecutableDir() {
+    char result[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+    if (count == -1) {
+        std::cerr << "❌ Error: Failed to determine executable path" << std::endl;
+        return ".";
+    }
+    result[count] = '\0';
+
+    // dirname 可能会修改输入，所以需要复制
+    char* dir = dirname(result);
+    return std::string(dir);
+}
+
+// 构建资源目录的绝对路径（相对于可执行文件）
+std::string getResourcePath() {
+    std::string execDir = getExecutableDir();
+    // 可执行文件在 build/yoyo-server，资源在 resource/
+    // 所以相对路径是 ../resource
+    return execDir + "/../resource";
+}
 
 int main() {
     using namespace yoyo;
@@ -28,8 +55,9 @@ int main() {
     TcpServer server(&loop, listenAddr);
     server.start();
 
-    // 服务器资源配置
-    const static std::string STATIC_FILE_ROOT_ABS = "/home/isyo/hello-git/net/resource";
+    // 服务器资源配置 - 使用相对路径（相对于可执行文件）
+    static const std::string STATIC_FILE_ROOT_ABS = getResourcePath();
+    std::cout << "📁 Resource directory: " << STATIC_FILE_ROOT_ABS << std::endl;
 
     // 初始化router 
     yoyo::router::Router mainRouter;

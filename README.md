@@ -15,6 +15,7 @@
 - 🔒 **安全设计**：SHA256 密码哈希、SQL 注入防护、输入验证
 - 📚 **完整文档**：架构设计、快速开始、API 参考
 - 🧵 **线程池**：支持 CPU 密集任务
+- 📦 **完全可移植**：使用 `$ORIGIN` 和相对路径，无需配置即可在任意目录运行
 
 ## 🚀 快速开始
 
@@ -227,6 +228,8 @@ chmod +x test_api.sh
 ## 📚 文档
 
 - **[快速开始](docs/QUICK_START.md)** - 5分钟上手
+- **[可移植性配置](docs/PORTABLE_SETUP.md)** - 项目可移植性指南（跨服务器部署）
+- **[动态库配置](docs/DYNAMIC_LIBRARY_GUIDE.md)** - 动态库路径配置详解
 - **[浏览器请求示例](docs/BROWSER_REQUESTS.md)** - 在浏览器中测试 API 的完整指南
 - **[架构设计](docs/ARCHITECTURE.md)** - 深入技术架构
 - **[MySQL 配置](docs/MYSQL_CONFIG_GUIDE.md)** - 数据库配置指南
@@ -246,12 +249,18 @@ yoyo_cpp_server/
 │   ├── database/          # 数据库模块
 │   ├── utils/             # 工具和日志
 │   └── threadpool/        # 线程池
+├── lib/                   # 第三方库
+│   └── vendor/            # 供应商库（使用 $ORIGIN 相对路径）
+│       └── sqlpool/       # MySQL 连接池库
+├── resource/              # 静态资源（HTML、CSS、图片）
 ├── docs/                  # 文档
 ├── examples/              # 使用示例
 ├── scripts/               # 编译和运行脚本
 ├── config/                # 配置文件示例
 └── tests/                 # 测试代码
 ```
+
+**注**: 项目使用相对路径设计，可在任意目录运行无需配置。详见 [可移植性配置指南](docs/PORTABLE_SETUP.md)。
 
 ## 🎮 功能演示
 

@@ -2,7 +2,12 @@
 
 ![C++](https://img.shields.io/badge/C%2B%2B-17-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Build](https://img.shields.io/badge/Build-Passing-brightgreen)
 
-一个高性能、易扩展的 **C++17 网络框架**，采用 Reactor 模式和 Epoll I/O 多路复用，支持 MySQL 数据库集成和实时游戏系统。
+一个高性能、易扩展的 **C++17 网络框架**，采用 Reactor 模式和 Epoll I/O 多路复用，支持 MySQL 数据库集成和http请求的网络服务器。
+本项目网络模块的部分学习参考：[yuesong-feng/30dayMakeCppServer](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2Fyuesong-feng%2F30dayMakeCppServer&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+
+json解析parser的具体实现可见：[isyoCode/yoyo_jsonparser](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyo_jsonparser&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+logger的具体实现详见：[isyoCode/yoyologger](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyologger&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+
 
 ## ✨ 特性
 
@@ -22,7 +27,7 @@
 ### 前置要求
 
 - Linux/Unix 系统
-- C++17 编译器 (g++, clang)
+- C++20 编译器 (g++, clang)
 - MySQL 开发库（可选）
 - OpenSSL 开发库（可选）
 
@@ -312,30 +317,10 @@ Events → Demultiplexer (Epoll) → Eventloop → Handlers
 - ✅ 会话管理
 - ✅ HTTPS 就绪
 
-## 🤝 贡献
-
-欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何参与。
-
-### 贡献流程
-
-1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 打开 Pull Request
-
 ## 📄 许可证
 
 本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
 
-## 📞 联系方式
-
-- **GitHub Issues** - 报告 bug 或提交功能请求
-- **讨论区** - 讨论设计和贡献
-
-## 🙏 致谢
-
-感谢所有贡献者和使用者的支持！
 
 ## 📈 项目统计
 

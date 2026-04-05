@@ -9,10 +9,42 @@
 #include <filesystem>
 #include <fstream>
 #include <mutex>
-#include <source_location>
 #include <thread>
 #include <utility>
 #include <vector>
+
+
+// 判断编译器是否支持 C++20 的 source_location
+#ifdef __has_include
+#  if __has_include(<source_location>) && __cplusplus >= 202002L
+#    define HAS_CXX20_SOURCE_LOCATION 1
+#    include <source_location>
+#  endif
+#endif
+
+// 如果不支持，手动实现兼容版本
+#ifndef HAS_CXX20_SOURCE_LOCATION
+namespace std {
+    struct source_location {
+        const char* _file = nullptr;
+        const char* _func = nullptr;
+        uint_least32_t _line = 0;
+
+        static constexpr source_location current(
+            const char* file = __builtin_FILE(),
+            const char* func = __builtin_FUNCTION(),
+            uint_least32_t line = __builtin_LINE()
+        ) {
+            return { file, func, line };
+        }
+
+        constexpr const char* file_name() const noexcept { return _file; }
+        constexpr const char* function_name() const noexcept { return _func; }
+        constexpr uint_least32_t line() const noexcept { return _line; }
+    };
+}
+#endif
+// ========================================================================================
 
 namespace yoyo {
 

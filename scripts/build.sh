@@ -37,7 +37,7 @@ fi
 # Add rpath using $ORIGIN for portability - library path will be relative to executable
 # Executable is in build/, library is in lib/vendor/sqlpool/v1.0/
 # So from build/ we need to go ../lib/vendor/sqlpool/v1.0
-LIB_FLAGS="-L$SQLPOOL_LIB_PATH -Wl,-rpath,\$ORIGIN/../lib/vendor/sqlpool/v1.0 -lmysqlpool -lmysqlclient -lssl -lcrypto"
+LIB_FLAGS="-L$SQLPOOL_LIB_PATH -Wl,-rpath,\$ORIGIN/../lib/vendor/sqlpool/v1.0 -lmysqlpool -lmysqlclient -lssl -lcrypto -pthread"
 
 # Source files
 CORE_SOURCES="$PROJECT_ROOT/src/core/Epoll.cc \

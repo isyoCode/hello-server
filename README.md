@@ -14,6 +14,8 @@ https://github.com/isyoCode/yoyo_jsonparser
 日志模块实现详见：
 https://github.com/isyoCode/yoyologger
 
+SqlPool实现详见：
+https://github.com/isyoCode/SqlPool
 
 ## ✨ 特性
 

@@ -3,10 +3,13 @@
 ![C++](https://img.shields.io/badge/C%2B%2B-17-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Build](https://img.shields.io/badge/Build-Passing-brightgreen)
 
 一个高性能、易扩展的 **C++17 网络框架**，采用 Reactor 模式和 Epoll I/O 多路复用，支持 MySQL 数据库集成和http请求的网络服务器。
-本项目网络模块的部分学习参考：[yuesong-feng/30dayMakeCppServer](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2Fyuesong-feng%2F30dayMakeCppServer&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+一个高性能、易扩展的 C++17 网络框架，采用 Reactor 模式和 Epoll I/O 多路复用，支持 MySQL 数据库集成与 HTTP 请求处理的网络服务器。
 
-json解析parser的具体实现可见：[isyoCode/yoyo_jsonparser](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyo_jsonparser&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
-logger的具体实现详见：[isyoCode/yoyologger](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyologger&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+本项目网络模块部分学习参考：[yuesong-feng/30dayMakeCppServer](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2Fyuesong-feng%2F30dayMakeCppServer&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+
+JSON 解析器实现详见：[isyoCode/yoyo_jsonparser](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyo_jsonparser&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+
+日志模块实现详见：[isyoCode/yoyologger](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyologger&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
 
 
 ## ✨ 特性

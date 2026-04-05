@@ -5,11 +5,14 @@
 一个高性能、易扩展的 **C++17 网络框架**，采用 Reactor 模式和 Epoll I/O 多路复用，支持 MySQL 数据库集成和http请求的网络服务器。
 一个高性能、易扩展的 C++17 网络框架，采用 Reactor 模式和 Epoll I/O 多路复用，支持 MySQL 数据库集成与 HTTP 请求处理的网络服务器。
 
-本项目网络模块部分学习参考：[yuesong-feng/30dayMakeCppServer](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2Fyuesong-feng%2F30dayMakeCppServer&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+本项目网络模块部分学习参考：
+https://github.com/yuesong-feng/30dayMakeCppServer
 
-JSON 解析器实现详见：[isyoCode/yoyo_jsonparser](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyo_jsonparser&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+JSON 解析器实现详见：
+https://github.com/isyoCode/yoyo_jsonparser
 
-日志模块实现详见：[isyoCode/yoyologger](sslocal://flow/file_open?url=https%3A%2F%2Fgithub.com%2FisyoCode%2Fyoyologger&flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=)
+日志模块实现详见：
+https://github.com/isyoCode/yoyologger
 
 
 ## ✨ 特性

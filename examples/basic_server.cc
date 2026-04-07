@@ -56,7 +56,10 @@ int main() {
     server.start();
 
     // 服务器资源配置 - 使用相对路径（相对于可执行文件）
-    static const std::string STATIC_FILE_ROOT_ABS = getResourcePath();
+   
+    // static const std::string STATIC_FILE_ROOT_ABS = getResourcePath();
+    static const std::string STATIC_FILE_ROOT_ABS = "/home/yuandi/hello-server/resource";
+
     std::cout << "📁 Resource directory: " << STATIC_FILE_ROOT_ABS << std::endl;
 
     // 初始化router 

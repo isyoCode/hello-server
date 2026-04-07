@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打鱼游戏 - 欢乐捕鱼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a4d7a 0%, #0d2540 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .header {
+            text-align: center;
+            color: #fff;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            color: #fff;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        #gameCanvas {
+            border: 3px solid #ffd700;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #1a4d7a 0%, #0a2850 50%, #051f3d 100%);
+            display: block;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            cursor: crosshair;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: 2px solid #ffd700;
+            background: linear-gradient(135deg, #1a4d7a 0%, #0d2540 100%);
+            color: #ffd700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #ffd700;
+            color: #0d2540;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .stats-panel {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffd700;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: #fff;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .stat-box-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .stat-box-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .message {
+            font-size: 1.2em;
+            color: #ffd700;
+            text-align: center;
+            height: 30px;
+            min-height: 30px;
+        }
+
+        @media (max-width: 768px) {
+            #gameCanvas {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .game-info, .stat-box {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🎣 欢乐捕鱼</h1>
+            <p style="color: #fff; opacity: 0.8;">点击屏幕捕鱼，积累分数！</p>
+        </div>
+
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-label">🎯 当前得分</div>
+                <div class="info-value" id="currentScore">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">⏱️ 游戏时间</div>
+                <div class="info-value" id="timeRemaining">60s</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">🐟 已捕获</div>
+                <div class="info-value" id="fishCaught">0</div>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+        <div class="message" id="message"></div>
+
+        <div class="controls">
+            <button id="startBtn" onclick="startGame()">开始游戏</button>
+            <button id="pauseBtn" onclick="pauseGame()" disabled>暂停</button>
+            <button id="resetBtn" onclick="resetGame()">重置</button>
+            <button onclick="backToSelection()">返回选择</button>
+        </div>
+
+        <div class="stats-panel">
+            <div class="stat-box">
+                <div class="stat-box-label">📊 最高分</div>
+                <div class="stat-box-value" id="highScore">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-label">⚡ 捕获速率</div>
+                <div class="stat-box-value" id="catchRate">0/s</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-label">🎖️ 游戏次数</div>
+                <div class="stat-box-value" id="gameCount">0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 游戏状态
+        const gameState = {
+            isRunning: false,
+            isPaused: false,
+            score: 0,
+            highScore: localStorage.getItem('fishingHighScore') || 0,
+            timeRemaining: 60,
+            totalTime: 60,
+            fishCaught: 0,
+            gameCount: localStorage.getItem('fishingGameCount') || 0,
+            gameStartTime: 0
+        };
+
+        // 鱼类对象
+        class Fish {
+            constructor() {
+                this.x = Math.random() * (canvas.width - 40);
+                this.y = Math.random() * (canvas.height - 40);
+                this.radius = 15 + Math.random() * 15;
+                this.speed = 1 + Math.random() * 3;
+                this.angle = Math.random() * Math.PI * 2;
+                this.color = this.getRandomColor();
+                this.points = Math.floor(20 + this.radius * 1.5);
+            }
+
+            getRandomColor() {
+                const colors = ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#FF8C42', '#A78BFA'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+
+                // 边界反弹
+                if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+                    this.angle = Math.PI - this.angle;
+                    this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x));
+                }
+                if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+                    this.angle = -this.angle;
+                    this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y));
+                }
+            }
+
+            draw() {
+                // 鱼体
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.radius, this.radius * 0.6, this.angle, 0, Math.PI * 2);
+                ctx.fill();
+
+                // 鱼眼
+                ctx.fillStyle = 'white';
+                const eyeX = this.x + Math.cos(this.angle) * (this.radius * 0.6);
+                const eyeY = this.y + Math.sin(this.angle) * (this.radius * 0.6);
+                ctx.beginPath();
+                ctx.arc(eyeX, eyeY, this.radius * 0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.arc(eyeX, eyeY, this.radius * 0.15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            isClicked(clickX, clickY) {
+                const dx = this.x - clickX;
+                const dy = this.y - clickY;
+                return Math.sqrt(dx * dx + dy * dy) < this.radius + 10;
+            }
+        }
+
+        // 鱼群数组
+        let fishes = [];
+
+        function initGame() {
+            fishes = [];
+            for (let i = 0; i < 8; i++) {
+                fishes.push(new Fish());
+            }
+        }
+
+        function startGame() {
+            if (gameState.isRunning) return;
+
+            gameState.isRunning = true;
+            gameState.isPaused = false;
+            gameState.score = 0;
+            gameState.fishCaught = 0;
+            gameState.timeRemaining = gameState.totalTime;
+            gameState.gameCount++;
+            gameState.gameStartTime = Date.now();
+
+            localStorage.setItem('fishingGameCount', gameState.gameCount);
+
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.getElementById('message').textContent = '游戏已开始！';
+
+            initGame();
+            update();
+        }
+
+        function pauseGame() {
+            gameState.isPaused = !gameState.isPaused;
+            const btn = document.getElementById('pauseBtn');
+            btn.textContent = gameState.isPaused ? '继续' : '暂停';
+            document.getElementById('message').textContent = gameState.isPaused ? '游戏已暂停' : '';
+        }
+
+        function resetGame() {
+            gameState.isRunning = false;
+            gameState.isPaused = false;
+            gameState.score = 0;
+            gameState.fishCaught = 0;
+            gameState.timeRemaining = gameState.totalTime;
+
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('pauseBtn').textContent = '暂停';
+            document.getElementById('message').textContent = '';
+
+            fishes = [];
+            draw();
+        }
+
+        function update() {
+            if (!gameState.isRunning) return;
+
+            if (!gameState.isPaused) {
+                const elapsed = (Date.now() - gameState.gameStartTime) / 1000;
+                gameState.timeRemaining = Math.max(0, gameState.totalTime - elapsed);
+
+                fishes.forEach(fish => fish.update());
+
+                // 生成新鱼
+                if (Math.random() < 0.02 && fishes.length < 15) {
+                    fishes.push(new Fish());
+                }
+
+                if (gameState.timeRemaining <= 0) {
+                    endGame();
+                    return;
+                }
+            }
+
+            updateDisplay();
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        function draw() {
+            // 清空画布
+            ctx.fillStyle = 'rgba(10, 40, 80, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制网格背景
+            ctx.strokeStyle = 'rgba(255, 215, 0, 0.05)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.width; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < canvas.height; i += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // 绘制鱼
+            fishes.forEach(fish => fish.draw());
+
+            // 绘制准心
+            const mousePos = window.mousePos || { x: canvas.width / 2, y: canvas.height / 2 };
+            if (canvas.getBoundingClientRect().top < window.innerHeight &&
+                canvas.getBoundingClientRect().bottom > 0) {
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(mousePos.x, mousePos.y, 20, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('currentScore').textContent = gameState.score;
+            document.getElementById('timeRemaining').textContent = Math.ceil(gameState.timeRemaining) + 's';
+            document.getElementById('fishCaught').textContent = gameState.fishCaught;
+            document.getElementById('highScore').textContent = gameState.highScore;
+            document.getElementById('gameCount').textContent = gameState.gameCount;
+
+            const elapsed = gameState.totalTime - gameState.timeRemaining;
+            const catchRate = elapsed > 0 ? (gameState.fishCaught / elapsed).toFixed(2) : 0;
+            document.getElementById('catchRate').textContent = catchRate + '/s';
+        }
+
+        function endGame() {
+            gameState.isRunning = false;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+                localStorage.setItem('fishingHighScore', gameState.highScore);
+                document.getElementById('message').textContent = `🎉 新高分！${gameState.score} 分`;
+            } else {
+                document.getElementById('message').textContent = `游戏结束！得分：${gameState.score}`;
+            }
+
+            updateDisplay();
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (!gameState.isRunning || gameState.isPaused) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            for (let i = fishes.length - 1; i >= 0; i--) {
+                if (fishes[i].isClicked(clickX, clickY)) {
+                    gameState.score += fishes[i].points;
+                    gameState.fishCaught++;
+
+                    // 移除被点击的鱼
+                    fishes.splice(i, 1);
+                    break;
+                }
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            window.mousePos = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        });
+
+        function backToSelection() {
+            window.location.href = '/game_selection.html';
+        }
+
+        // 初始化
+        updateDisplay();
+        draw();
+    </script>
+</body>
+</html>

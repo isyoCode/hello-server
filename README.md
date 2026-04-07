@@ -35,7 +35,7 @@ https://github.com/isyoCode/SqlPool
 ### 前置要求
 
 - Linux/Unix 系统
-- C++20 编译器 (g++, clang)
+- C++17 编译器 (g++, clang)
 - MySQL 开发库（可选）
 - OpenSSL 开发库（可选）
 

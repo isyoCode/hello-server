@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏中心 - 选择您的游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header with user info */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-info h2 {
+            color: #333;
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+        .user-info p {
+            color: #999;
+            font-size: 0.9em;
+            margin: 3px 0 0 0;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.logout {
+            background: #ff6b6b;
+        }
+
+        .action-btn.logout:hover {
+            background: #ff5252;
+        }
+
+        /* Header section */
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Search and filter section */
+        .search-filter {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #764ba2;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Games grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .game-card-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+        }
+
+        .game-card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .game-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+            flex: 1;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .stat {
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .stat-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        .game-personal-stats {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .personal-stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+        }
+
+        .personal-stat-label {
+            font-weight: 500;
+        }
+
+        .personal-stat-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .play-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .play-button:hover {
+            opacity: 0.9;
+        }
+
+        .play-button:active {
+            transform: scale(0.98);
+        }
+
+        .bottom-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            color: white;
+            padding: 40px;
+            font-size: 1.2em;
+        }
+
+        .no-results p {
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-section {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .bottom-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Top bar with user info -->
+        <div class="top-bar">
+            <div class="user-section">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <div class="user-info">
+                    <h2 id="userName">用户</h2>
+                    <p id="userEmail">example@email.com</p>
+                </div>
+            </div>
+            <div class="top-actions">
+                <button class="action-btn" onclick="refreshStats()">刷新统计</button>
+                <button class="action-btn logout" onclick="logout()">登出</button>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>🎮 游戏中心</h1>
+            <p>选择您想要玩的游戏</p>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-filter">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="searchInput" placeholder="搜索游戏..." onkeyup="filterGames()">
+                <button class="search-btn" onclick="filterGames()">搜索</button>
+            </div>
+            <div class="filter-section">
+                <button class="filter-btn active" onclick="setDifficultyFilter('all')">全部</button>
+                <button class="filter-btn" onclick="setDifficultyFilter('easy')">简单 ⭐</button>
+                <button class="filter-btn" onclick="setDifficultyFilter('medium')">中等 ⭐⭐</button>
+                <button class="filter-btn" onclick="setDifficultyFilter('hard')">困难 ⭐⭐⭐+</button>
+            </div>
+        </div>
+
+        <!-- Games Grid -->
+        <div class="games-grid" id="gamesGrid"></div>
+
+        <!-- No results message -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <p>😕 未找到匹配的游戏</p>
+            <button class="btn" onclick="setDifficultyFilter('all'); document.getElementById('searchInput').value = '';">清除筛选</button>
+        </div>
+
+        <!-- Bottom buttons -->
+        <div class="bottom-buttons">
+            <button class="btn" onclick="goToDashboard()">📊 返回首页</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏列表数据
+        const games = [
+            {
+                id: 'tetris',
+                title: '俄罗斯方块',
+                emoji: '🧱',
+                description: '经典的俄罗斯方块游戏。消除完整的行来获得分数，挑战自己的高分记录！',
+                difficulty: 'medium',
+                tags: ['经典', '益智'],
+                url: '/tetris.html',
+                stats: {
+                    highScore: 0,
+                    timesPlayed: 0,
+                    totalScore: 0
+                }
+            },
+            {
+                id: 'fighter',
+                title: '格斗竞技',
+                emoji: '🥊',
+                description: '激爽的格斗游戏，与对手进行实时对战。展现你的格斗技巧！',
+                difficulty: 'hard',
+                tags: ['动作', '对战'],
+                url: '/fighter-game.html',
+                stats: {
+                    highScore: 0,
+                    timesPlayed: 0,
+                    totalScore: 0
+                }
+            },
+            {
+                id: 'fishing',
+                title: '欢乐捕鱼',
+                emoji: '🎣',
+                description: '快节奏的打鱼游戏。点击屏幕捕鱼，在有限的时间内积累更高的分数！',
+                difficulty: 'easy',
+                tags: ['休闲', '点击'],
+                url: '/fishing.html',
+                stats: {
+                    highScore: 0,
+                    timesPlayed: 0,
+                    totalScore: 0
+                }
+            }
+        ];
+
+        let currentUser = null;
+        let difficultyFilter = 'all';
+
+        // 页面加载
+        window.addEventListener('load', () => {
+            loadUserInfo();
+            loadGameStats();
+            renderGames();
+        });
+
+        // 加载用户信息
+        function loadUserInfo() {
+            const userInfo = JSON.parse(localStorage.getItem('currentUser')) || {
+                username: '游客',
+                email: 'guest@example.com'
+            };
+            currentUser = userInfo;
+
+            document.getElementById('userName').textContent = userInfo.username;
+            document.getElementById('userEmail').textContent = userInfo.email;
+
+            // 头像取首字母
+            const avatar = userInfo.username.charAt(0).toUpperCase();
+            document.getElementById('userAvatar').textContent = avatar;
+        }
+
+        // 从localStorage加载游戏统计
+        function loadGameStats() {
+            games.forEach(game => {
+                const statsKey = `gameStats_${game.id}`;
+                const savedStats = localStorage.getItem(statsKey);
+                if (savedStats) {
+                    game.stats = JSON.parse(savedStats);
+                }
+            });
+        }
+
+        // 保存游戏统计
+        function saveGameStats(gameId, newStats) {
+            const game = games.find(g => g.id === gameId);
+            if (game) {
+                game.stats = { ...game.stats, ...newStats };
+                localStorage.setItem(`gameStats_${gameId}`, JSON.stringify(game.stats));
+            }
+        }
+
+        // 渲染游戏卡片
+        function renderGames() {
+            const grid = document.getElementById('gamesGrid');
+            const noResults = document.getElementById('noResults');
+            const filteredGames = getFilteredGames();
+
+            if (filteredGames.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+
+            grid.innerHTML = filteredGames.map(game => `
+                <div class="game-card">
+                    <div class="game-card-image">${game.emoji}</div>
+                    <div class="game-card-content">
+                        <div class="game-title">${game.title}</div>
+                        <div class="game-description">${game.description}</div>
+
+                        <div class="game-stats">
+                            <div class="stat">
+                                <span class="stat-value">${getDifficultyStars(game.difficulty)}</span>
+                                <div class="stat-label">难度</div>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">${game.tags.join(', ')}</span>
+                                <div class="stat-label">标签</div>
+                            </div>
+                        </div>
+
+                        <div class="game-personal-stats">
+                            <div class="personal-stat">
+                                <span class="personal-stat-label">🏆 最高分:</span>
+                                <span class="personal-stat-value">${game.stats.highScore}</span>
+                            </div>
+                            <div class="personal-stat">
+                                <span class="personal-stat-label">🎮 游玩次数:</span>
+                                <span class="personal-stat-value">${game.stats.timesPlayed}</span>
+                            </div>
+                            <div class="personal-stat">
+                                <span class="personal-stat-label">📊 总分数:</span>
+                                <span class="personal-stat-value">${game.stats.totalScore}</span>
+                            </div>
+                        </div>
+
+                        <button class="play-button" onclick="playGame('${game.url}')">
+                            开始游戏
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 获取难度星标
+        function getDifficultyStars(difficulty) {
+            const stars = {
+                'easy': '⭐',
+                'medium': '⭐⭐',
+                'hard': '⭐⭐⭐'
+            };
+            return stars[difficulty] || '⭐';
+        }
+
+        // 获取过滤后的游戏
+        function getFilteredGames() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            return games.filter(game => {
+                const matchesSearch = game.title.toLowerCase().includes(searchTerm) ||
+                                     game.description.toLowerCase().includes(searchTerm) ||
+                                     game.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+
+                const matchesDifficulty = difficultyFilter === 'all' ||
+                                         game.difficulty === difficultyFilter;
+
+                return matchesSearch && matchesDifficulty;
+            });
+        }
+
+        // 筛选游戏
+        function filterGames() {
+            renderGames();
+        }
+
+        // 设置难度筛选
+        function setDifficultyFilter(difficulty) {
+            difficultyFilter = difficulty;
+
+            // 更新按钮样式
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            renderGames();
+        }
+
+        // 开始游戏
+        function playGame(gameUrl) {
+            window.location.href = gameUrl;
+        }
+
+        // 返回首页
+        function goToDashboard() {
+            window.location.href = '/dashboard.html';
+        }
+
+        // 登出
+        function logout() {
+            if (confirm('确定要登出吗？')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = '/auth.html';
+            }
+        }
+
+        // 刷新统计数据
+        function refreshStats() {
+            loadGameStats();
+            renderGames();
+            alert('统计数据已刷新！');
+        }
+    </script>
+</body>
+</html>

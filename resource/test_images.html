@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片测试页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .image-card { border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
+        .image-card img { width: 100%; height: auto; border-radius: 3px; }
+        .image-card p { text-align: center; margin: 10px 0 0 0; font-size: 14px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>图片服务器测试</h1>
+    <p>以下图片从服务器加载：</p>
+
+    <div class="gallery">
+        <div class="image-card">
+            <img src="/images/3.jpg" alt="Image 3">
+            <p>3.jpg (492KB)</p>
+        </div>
+        <div class="image-card">
+            <img src="/images/1.png" alt="Image 1">
+            <p>1.png (2.3MB)</p>
+        </div>
+        <div class="image-card">
+            <img src="/images/scenery1.jpg" alt="Scenery 1">
+            <p>scenery1.jpg (6.2MB)</p>
+        </div>
+        <div class="image-card">
+            <img src="/images/scenery2.jpg" alt="Scenery 2">
+            <p>scenery2.jpg (3.5MB)</p>
+        </div>
+        <div class="image-card">
+            <img src="/images/background.jpg" alt="Background">
+            <p>background.jpg (316KB)</p>
+        </div>
+        <div class="image-card">
+            <img src="/images/someone.jpg" alt="Someone">
+            <p>someone.jpg (64KB)</p>
+        </div>
+    </div>
+</body>
+</html>

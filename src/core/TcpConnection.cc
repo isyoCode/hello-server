@@ -101,7 +101,6 @@ void TcpConnection::handleHttpRead() {
                     response.addHeader("Connection", "close");
                     send(response.serialize());
                     shutdown();
-                    InputBuffer_.retrieve(headerEndPos + 4); // 移除已处理的请求头
                     return;
                 }
 
@@ -137,7 +136,6 @@ void TcpConnection::handleHttpRead() {
                         response.addHeader("Connection", "close");
                         send(response.serialize());
                         shutdown();
-                        InputBuffer_.retrieve(headerEndPos + 4); // 移除已处理的请求头
                         return;
                     }
                     try {
@@ -152,7 +150,6 @@ void TcpConnection::handleHttpRead() {
                             response.addHeader("Connection", "close");
                             send(response.serialize());
                             shutdown();
-                            InputBuffer_.retrieve(headerEndPos + 4); // 移除已处理的请求头
                             return;
                         }
                     } catch(const std::exception& e) {
@@ -165,7 +162,6 @@ void TcpConnection::handleHttpRead() {
                         response.addHeader("Connection", "close");
                         send(response.serialize());
                         shutdown();
-                        InputBuffer_.retrieve(headerEndPos + 4); // 移除已处理的请求头
                         return;
                     }
                 }

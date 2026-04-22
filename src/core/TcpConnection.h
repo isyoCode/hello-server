@@ -68,6 +68,11 @@ public:
 
     int fd() const { return socket_.getFd(); }
 
+    // 在 TcpServer 创建好 shared_ptr 后调用，绑定 Channel 的 tie 保证生命周期安全
+    void connectEstablished() {
+        channel_.tie(shared_from_this());
+    }
+
     // 发送数据（直接写到socket fd）
     void send(const std::string& data) {
         if (loop_->isInLoopThread()) {

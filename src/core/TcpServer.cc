@@ -31,6 +31,9 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr) {
     // 保存连接
     connections_[sockfd] = conn;
 
+    // 绑定 Channel 的 tie，保证事件处理期间 TcpConnection 不被提前析构
+    conn->connectEstablished();
+
     // 调用 ConnectionCallback 告诉业务层有新连接
     if (connectionCallback_) connectionCallback_(conn);
 

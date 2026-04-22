@@ -6,6 +6,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <memory>
 
 #include "Epoll.h"
 #include "Socket.h"
@@ -49,6 +50,9 @@ class Channel {
 
   void setRealEvents(uint32_t realEvents);
 
+  // 绑定 TcpConnection 的 shared_ptr，handleEvent 期间持有其引用防止提前析构
+  void tie(const std::shared_ptr<void>& obj);
+
   void handleEvent();
 
   void setReadCallback(ReadEventCallback rb) { readCallback_ = std::move(rb); }
@@ -67,6 +71,7 @@ class Channel {
   
  private:
   void update();
+  void handleEventWithGuard();
 
  private:
   int fd_;
@@ -75,6 +80,9 @@ class Channel {
   uint32_t revents_;  // 真实接受到的事件
 
   bool isETMod_;
+
+  std::weak_ptr<void> tie_;
+  bool tied_ = false;
 
   // 每个channel需要相关的回调对象
   ReadEventCallback readCallback_;
